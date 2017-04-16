@@ -1,0 +1,89 @@
+<b><#selectbg_g>v4.1</#></b>
+<*>Nueva Ramdisk</*>
+<*></*>
+<*></*>
+<*></*>
+<*></*>
+<*></*>
+<*></*>
+<*></*>
+
+<b><#selectbg_g>v4.0</#></b>
+<*>Actualizado a linux 3.10.60 (parches del kernel linux)</*>
+<*>Añadidos más governores (alucard/lionfish/barry_allen/intelliactive - Pueden ser inestables, usa interactive si tienes problemas</*>
+<*>Añadidos hotplugs (intelliplug/bricked hotplug/alucard/msm_hotplug)</*>
+<*>Añadido i/o schedulers (vr/fiops/sioplus/zen) y activado FIOPS por defecto</*>
+<*>Actualizado powersuspend</*>
+<*>ramdisk mejorado</*>
+<*>cpufreq mejorado</*>
+<*>Mejoras en el uso de la memoria</*>
+
+<b><#selectbg_g>v3.0</#></b>
+<*>Activada carga rápida por USB</*>
+<*>Activado cubic tcp por defecto para velocidades de internet más altas.</*>
+<*>Desactivado software CRC para más rendimiento</*>
+<*>Optimizado framebuffer para más rendimiento</*>
+<*>Añadido regulador par OC</*>
+<*>Mejorado el consumo de batería entre 200-400 MHZ</*>
+<*>Añadido nvidia relaxation parche para mejores consumos</*>
+<*>Mejora del uso de la batería</*>
+<*>Implementado fast idling para la  CPU</*>
+<*>Añadido intelli_thermal para mejores temperaturas</*>
+<*>Reducidi high-load y average-load para mejorar la batería</*>
+<*>Activado arch_power</*>
+<*>Mejora de rendimineto</*>
+
+<b><#selectbg_g>v2.1</#></b>
+<*>Añadido SuperSU-v2.79-SR3 (último)</*>
+
+<b><#selectbg_g>v2.0</#></b>
+<*>J500HXXU2BPK4 Base</*>
+<*>Añadido builtin wlan module</*>
+<*>Añadido westwood tcp y cubic por defecto</*>
+<*>Adreno Idler 1.1, arreglado msm_adreno_tz</*>
+<*>Añadido powersuspend</*>
+<*>Más msm-thermal tweaks</*>
+<*>Reducido el sobrecalentamiento</*>
+<*>Activado multi-core ahorro de energía</*>
+<*>Añadido SuperSU SR5</*>
+<*>Fixeado Deepsleep</*>
+<*>Añadido 50Mhz y 100Mhz frecuencias para ahorra batería en depp sleep.</*>
+<*>Añadido dynamic sync 2.0</*>
+<*>xz: optimizada Sfck compresión</*>
+<*>Añadido instalador AROMA</*>
+
+<b><#selectbg_g>v1.4</#></b>
+<*>Wifi fixeado</*>
+<*>Optimización de batería</*>
+<*>Fixeadas frequencias</*>
+<*>tweaks ramdisk</*>
+<*>Añadida ramdisk</*>
+<*>Fix ramdisk</*>
+<*>fixeado Kcal driver (calibración de colores)</*>
+
+<b><#selectbg_g>v1.3</#></b>
+<*>añadido KCAL driver</*>
+<*>sysctl: favor filesystem</*>
+<*>GPU OC a 720Mhz</*>
+<*>1.5Ghz CPU OC</*>
+<*>Wifi fixeado</*>
+
+<b><#selectbg_g>v1.2</#></b>
+<*>SuperSU SR3 parche + init.d soporte</*>
+<*>Wifi fixeado Alpha</*>
+<*>CUBIC TCP</*>
+<*>tty: fixeado memleak en alloc_pid</*>
+<*>arch/arm : compilado con hardfloat + neon-vfpv4"</*>
+<*>Tweaks para Cortex A53/ARMv8 arquitectura</*>
+
+<b><#selectbg_g>v1.0 - Primera Versión</#></b>
+<*>A500GXXU1CPH4 actualizado</*>
+<*>OTG y permisivo activados</*>
+<*>Optimización de memoria</*>
+<*>Fix notificaciones</*>
+<*>Ramdisk parcheada</*>
+<*>Actualizado build.sh</*>
+<*>2.07Ghz CPU OC</*>
+<*>Neon and VFPv3</*>
+<*>Linaro GCC 4.9.4</*>
+<*>XZ compresión</*>

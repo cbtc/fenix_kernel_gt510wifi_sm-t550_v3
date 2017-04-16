@@ -1,0 +1,113 @@
+# Copyright (C) 2012 The Android Open Source Project
+#
+# IMPORTANT: Do not create world writable files or directories.
+# This is a common source of Android security bugs.
+#
+
+on init
+#Private Mode
+    mkdir /mnt/shell/privatemode 0700 system system
+    mkdir /storage/Private 0000 system system
+
+on post-fs-data
+#Private Mode
+    mkdir /data/privatemode 0770 system system
+    chown system system /data/privatemode
+    restorecon /data/privatemode
+
+on early-boot
+    chown bluetooth net_bt_stack /dev/ttyHS0
+    chmod 0660 /dev/ttyHS0
+
+on boot
+
+# Assign TCP buffer thresholds to be ceiling value of technology maximums
+# Increased technology maximums should be reflected here.
+    write /proc/sys/net/core/rmem_max  2097152
+    write /proc/sys/net/core/wmem_max  2097152
+
+# permission for Input Device(Touchkey).
+    chown radio system /sys/class/sec/sec_touchkey/glove_mode
+    chown radio system /sys/class/sec/sec_touchkey/touchkey_firm_update
+
+# MSP FactoryApp
+    mkdir /efs/FactoryApp 0775 system system
+
+# Audio NXP
+    chmod 0660 /dev/i2c-1
+    chown system system /dev/i2c-1
+
+# permissions for bluetooth.
+    setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
+    chown bluetooth net_bt_stack ro.bt.bdaddr_path
+    chown radio net_bt_stack /efs/bluetooth/bt_addr
+    chmod 0640 /efs/bluetooth/bt_addr
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
+	
+# IPSec for VOLTE   
+    chown root system /dev/socket
+    chmod 0775 /dev/socket
+	
+#Private Mode
+service privatemode /system/bin/sdcard -r /data/privatemode /mnt/shell/privatemode 1000 1000
+    class late_start
+    oneshot
+
+on fs
+
+# Support Preload install apks
+    mkdir /preload 0771 system system
+
+#For Absolute Persistence Partition
+
+    mkdir /persdata 0755 system system
+    mkdir /persdata/absolute 0750 system system
+
+    wait /dev/block/bootdevice/by-name/persdata
+    check_fs /dev/block/bootdevice/by-name/persdata ext4
+    mount ext4 /dev/block/bootdevice/by-name/persdata /persdata/absolute nosuid nodev barrier=1
+
+    chown system system /persdata
+    chmod 0755 /persdata
+    chown system system /persdata/absolute
+    chmod 0750 /persdata/absolute
+
+service at_distributor /system/bin/at_distributor
+    class late_start
+    user root
+    group radio log
+
+# diag app for cp uart
+service diag_uart_log /system/bin/diag_uart_log
+    class main
+    user root
+    group radio
+
+# umount service 
+service umount_service /system/bin/umount /preload 
+    disabled 
+    oneshot 
+ 
+# Support Preload install apks 
+on property:persist.sys.storage_preload=1 
+    mount ext4 /dev/block/bootdevice/by-name/hidden /preload nosuid nodev ro barrier=1
+    setprop storage.preload.complete 1
+ 
+on property:persist.sys.storage_preload=0
+    start umount_service
+
+service ftm_ptt /system/bin/ftm_ptt -d
+    user root
+    group radio system
+    disabled
+
+# IPSec for VOLTE
+service ipsec-daemon /system/bin/IPSecService
+    class main
+    socket ipsec_socket stream 660 system system
+    user system
+    group system net_raw inet net_admin
+
+

@@ -1,0 +1,107 @@
+# Copyright (C) 2012 The Android Open Source Project
+#
+# IMPORTANT: Do not create world writable files or directories.
+# This is a common source of Android security bugs.
+#
+
+on init
+
+on post-fs-data
+
+#Private Mode
+    mkdir /mnt/shell/ 0750 shell shell
+    mkdir /mnt/shell/privatemode 0700 system system
+    mkdir /storage/Private 0000 system system
+    mkdir /data/privatemode 0770 system system
+    chown system system /data/privatemode
+    restorecon /data/privatemode
+
+on early-boot
+    chown bluetooth net_bt_stack /dev/ttyHS0
+    chmod 0660 /dev/ttyHS0
+
+on boot
+
+# permission for Input Device(Touchkey).
+    chown radio system /sys/class/sec/sec_touchkey/glove_mode
+    chown radio system /sys/class/sec/sec_touchkey/touchkey_firm_update
+
+# MSP FactoryApp
+    mkdir /efs/FactoryApp 0775 system system
+
+# SSWAP
+    write /proc/sys/vm/swappiness 130
+
+# Audio NXP
+    chmod 0660 /dev/i2c-1
+    chown system system /dev/i2c-1
+
+# permissions for bluetooth.
+    setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
+    chown bluetooth net_bt_stack ro.bt.bdaddr_path
+    chown radio net_bt_stack /efs/bluetooth/bt_addr
+    chmod 0640 /efs/bluetooth/bt_addr
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
+    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
+
+on fs
+
+# Support Preload install apks
+    mkdir /preload 0771 system system
+
+#For Absolute Persistence Partition
+
+    mkdir /persdata 0755 system system
+    mkdir /persdata/absolute 0750 system system
+
+    wait /dev/block/bootdevice/by-name/persdata
+    check_fs /dev/block/bootdevice/by-name/persdata ext4
+    mount ext4 /dev/block/bootdevice/by-name/persdata /persdata/absolute nosuid nodev barrier=1
+
+    chown system system /persdata
+    chmod 0755 /persdata
+    chown system system /persdata/absolute
+    chmod 0750 /persdata/absolute
+
+service at_distributor /system/bin/at_distributor
+    class late_start
+    user root
+    group radio log
+
+# diag app for cp uart
+service diag_uart_log /system/bin/diag_uart_log
+    class main
+    user root
+    group radio
+
+# SSWAP
+service swapon /sbin/sswap -s
+    class core
+    user root
+    group root
+    seclabel u:r:sswap:s0
+    oneshot
+
+# for wlan FTM app
+service ftm_ptt /system/bin/ftm_ptt -d
+    user root
+    group radio system
+    disabled
+
+# umount service 
+service umount_service /system/bin/umount /preload 
+    disabled 
+    oneshot 
+ 
+# Support Preload install apks 
+on property:persist.sys.storage_preload=1 
+    mount ext4 /dev/block/bootdevice/by-name/hidden /preload nosuid nodev ro barrier=1 
+    setprop storage.preload.complete 1 
+ 
+on property:persist.sys.storage_preload=0 
+    start umount_service 
+
+
+
+

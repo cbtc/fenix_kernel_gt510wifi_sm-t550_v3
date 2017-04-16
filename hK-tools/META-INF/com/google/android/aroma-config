@@ -1,0 +1,171 @@
+###
+#
+# AROMA Installer 2.70 - AROMA Kernel Installer
+#       (c) 2011-2012 by Ahmad Amarullah
+#           amarullz - xda-developers
+#           http://www.amarullz.com/
+#
+#       Binary Version  : 2.70B
+#       Binary Codename : Flamboyan
+#
+##
+# Initializing Rom Information
+#
+ini_set("rom_name",             "FenixKernel");
+ini_set("rom_version",          "v4.0");
+ini_set("rom_author",           "Cbtc");
+ini_set("rom_device",           "SM-T550");
+ini_set("rom_date",             "11 de Abril");
+##
+# Show Animated Splash
+#
+anisplash(
+#  #-- Number of Loop
+    2,
+  
+  #-- Frame 1 [ Image, duration in millisecond ]. <AROMA Resource Dir>/splash/a[1..6].png
+    "splash/a1", 500,
+    "splash/a2", 30,
+    "splash/a3", 30,
+    "splash/a4", 30,
+    "splash/a5", 30,
+    "splash/a6", 30
+);
+
+#
+# Set Small Font to Support all fonts
+#
+fontresload( "0", "ttf/Roboto-Regular.ttf", "12" );
+fontresload( "1", "ttf/Roboto-Regular.ttf", "14" );
+theme("miui4");
+
+###################################################################################################################
+#
+# ROM INFORMATION
+#
+viewbox(
+  #-- Title
+    "Welcome to <i><b>FenixKernel</b></i>",
+  
+  #-- Text
+	"<b><#selectbg_g>Welcome</#></b> \n\n\n"+
+    "You are about to install <b>"+ini_get("rom_name")+
+	"</b> for <b>"+ini_get("rom_device")+"</b>.\n\n\n"+
+    
+  "  Version:   <b><#080>" + ini_get("rom_version") + "</#></b>\n"+
+  "  Updated:  <b><#080>" + ini_get("rom_date") + "</#></b>\n\n\n"+
+  "Tap Next to continue the installation...",
+  
+  #-- Icon
+    "@welcome"
+);
+
+
+###################################################################################################################
+#
+# TERMS OF USE
+#
+agreebox(
+  #-- Title
+    "Important Notice",
+    "Please carefully read the Terms of Use!",
+  
+  #-- Icon
+    "@license",
+  
+  #-- Text Content ( Read from <AROMA Resource Dir>/license.txt )
+    resread("license.txt"),
+  
+  #-- Checkbox Text
+    "I agree with these Terms of Use",
+  
+  #-- Unchecked Alert Message
+    "You must to agree with the Terms of Use to continue"
+);
+
+
+###################################################################################################################
+#
+# CHANGELOG
+#
+textbox(
+  #-- Title
+    "Changelog",
+  
+  #-- Subtitle
+    "FenixKernel Changelog",
+  
+  #-- Icon
+    "@update",
+  
+  #-- Arg 4
+    resread("changelog.txt")
+);
+
+###################################################################################################################
+#
+# SELECT INSTALL OPTIONS
+#
+
+form(
+	      "Kernel options",
+	      "Select what do you want to install",
+	      "icons/update",
+	      "hades.prop",
+  #
+  # Type:
+  #  - group              = Group
+  #  - select             = Select Item
+  #  - select.selected    = Selected Select Item
+  #  - check              = Checkbox Item
+  #  - check.checked      = Checked Checkbox Item
+  #  - hide               = Hidden
+  #
+  #-------------+-----------------------[ Selectbox Without Group ]------------------------------#
+  # PROP ID     | TITLE            |  SUBTITLE                                   |    Type       #
+  #-------------+--------+-------------------------------------------------------+---------------#
+    "kernel", "FenixKernel options", "", "group",
+      "kern", "Fenixkernel", "Install the kernel", "check.checked",
+      "su", "SuperSU", "Root the system", "check.checked"
+);
+
+###################################################################################################################
+#
+# INSTALLING
+# Next Screen is Installation UI, So change the next button text to "Install Now"
+#
+ini_set("text_next", "Install Now");
+ini_set("icon_next", "@installbutton");
+viewbox(
+    "Ready to install",
+    "You are now ready to begin installation.\n\n"+
+    "Press <b>Install now</b> to start.\n\n"+
+    "If you want to review or change any of your installation settings, press <b>Back</b>.",
+    "@install"
+);
+
+ini_set("text_next", "Next");
+install(
+  "Installing",
+  "Flashing <b>"+ini_get("rom_name")+"</b>...\n"+
+  "Please Wait...",
+  "@install",
+  "Done! Press <b>Next</b> button"
+);
+###################################################################################################################
+#
+# Exit to recovery by default to avoid patcher issues
+# 
+#
+# Next Button is "Finish"
+#
+ini_set("text_next", "Finish");
+ini_set("icon_next", "@finish");
+viewbox(
+    "Installation Completed",
+    "<#selectbg_g>\n<b>Congratulation...</b></#>\n\n"+
+    "<b>"+ini_get("rom_name")+"</b> has been installed into your device.\n"+
+	"Press finish to exit to recovery..",
+    "@welcome"
+);
+#---- FINISH

@@ -1,0 +1,7 @@
+# hK minimal rules
+
+/output/
+/*.zip
+/*.tar.md5
+/hK-out/
+/hK-zip/
