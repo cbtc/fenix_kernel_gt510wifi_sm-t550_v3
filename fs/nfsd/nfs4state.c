@@ -1200,14 +1200,15 @@ static int copy_cred(struct svc_cred *target, struct svc_cred *source)
 	return 0;
 }
 
-static int
+static long long
 compare_blob(const struct xdr_netobj *o1, const struct xdr_netobj *o2)
 {
-	if (o1->len < o2->len)
-		return -1;
-	if (o1->len > o2->len)
-		return 1;
-	return memcmp(o1->data, o2->data, o1->len);
+	long long res;
+
+	res = o1->len - o2->len;
+	if (res)
+		return res;
+	return (long long)memcmp(o1->data, o2->data, o1->len);
 }
 
 static int same_name(const char *n1, const char *n2)
@@ -1364,7 +1365,7 @@ add_clp_to_name_tree(struct nfs4_client *new_clp, struct rb_root *root)
 static struct nfs4_client *
 find_clp_in_name_tree(struct xdr_netobj *name, struct rb_root *root)
 {
-	int cmp;
+	long long cmp;
 	struct rb_node *node = root->rb_node;
 	struct nfs4_client *clp;
 
